@@ -1,4 +1,4 @@
-module github.com/kayestee/form3_cli
+module github.com/kayestee/f3_client
 
 go 1.16
 
