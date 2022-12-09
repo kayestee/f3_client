@@ -1,4 +1,4 @@
-package form3_cli
+package form3_client
 
 import (
 	"bytes"
