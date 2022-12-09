@@ -1,7 +1,8 @@
-package form3_client
+package test
 
 import (
 	"github.com/google/uuid"
+	"github.com/kayestee/f3_client/form3_client"
 	"log"
 	"math/rand"
 	"os"
@@ -11,21 +12,21 @@ import (
 )
 
 var generatedId string
-var form3cli Form3_API
+var form3cli = form3_client.Form3_API{
+	Api_host_url:     os.Getenv("API_HOST"),
+	Api_host_version: os.Getenv("API_VERSION"),
+}
 
 func TestCreateAccount(t *testing.T) {
-	form3cli.Api_host_url = os.Getenv("API_HOST")
-	form3cli.Api_host_version = os.Getenv("API_VERSION")
-
 	rand.Seed(time.Now().UnixNano())
-	var inputAccount AccountData
+	var inputAccount form3_client.AccountData
 	inputAccount.ID = uuid.New().String()
 	inputAccount.Type = "accounts"
 	inputAccount.OrganisationID = uuid.New().String()
 
 	var name = []string{"First", "Name", "Last", "Name"}
 
-	var accoutAttrs AccountAttributes
+	var accoutAttrs form3_client.AccountAttributes
 	accoutAttrs.Country = "GB"
 	accoutAttrs.BankID = "400302"
 	accoutAttrs.BankIDCode = "GBDSC"
@@ -73,18 +74,15 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func TestCreateAccountFail(t *testing.T) {
-	form3cli.Api_host_url = os.Getenv("API_HOST")
-	form3cli.Api_host_version = os.Getenv("API_VERSION")
-
 	rand.Seed(time.Now().UnixNano())
-	var inputAccount AccountData
+	var inputAccount form3_client.AccountData
 	inputAccount.ID = uuid.New().String()
 	inputAccount.Type = "accounts"
 	inputAccount.OrganisationID = uuid.New().String()
 
 	var name = []string{"First", "Name", "Last", "Name"}
 
-	var accoutAttrs AccountAttributes
+	var accoutAttrs form3_client.AccountAttributes
 	accoutAttrs.Country = "GB"
 	accoutAttrs.BankID = "400302"
 	accoutAttrs.BankIDCode = "GBDSC"
