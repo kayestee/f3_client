@@ -44,8 +44,6 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 		log.Println("Error while reading response body" + err.Error())
 	}
 
-	log.Println(string(body))
-
 	var respJsonUnMarshalled AccountJSON
 	errUnmarshall := json.Unmarshal(body, &respJsonUnMarshalled)
 	if errUnmarshall != nil {
@@ -85,8 +83,6 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 		log.Println("Error while reading response body" + err.Error())
 		return
 	}
-
-	log.Println(string(body))
 
 	var respJsonUnMarshalled AccountJSON
 	errUnmarshall := json.Unmarshal(body, &respJsonUnMarshalled)
