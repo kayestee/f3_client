@@ -13,6 +13,7 @@ type Form3_API struct {
 	Api_host_version string `default:"v1"`
 }
 
+// TODO: Add Comments
 func (client *Form3_API) CreateAccount(customerInfo AccountData) (response ResponseJSON) {
 	var jsonData AccountJSON
 	jsonData.Data = customerInfo
@@ -59,6 +60,8 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 	return
 }
 
+// TODO: Add Comments
+
 func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	log.Println("Fetching Account details for Id:" + id)
 	httpClient := &http.Client{}
@@ -97,6 +100,8 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	response.Data = respJsonUnMarshalled.Data
 	return
 }
+
+// TODO: Add Comments
 
 func (client *Form3_API) DeleteAccount(id string) (response ResponseJSON) {
 	log.Println("Deleting account ID:", id)
