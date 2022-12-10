@@ -2,7 +2,7 @@ package form3_client
 
 import (
 	"bytes"
-	json "encoding/json"
+	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -13,7 +13,11 @@ type Form3_API struct {
 	Api_host_version string `default:"v1"`
 }
 
-// TODO: Add Comments
+/*
+API request for fetching account info, expects account JSON as input.
+Returns the success or failure message along with Account data form3 api.
+*/
+
 func (client *Form3_API) CreateAccount(customerInfo AccountData) (response ResponseJSON) {
 	var jsonData AccountJSON
 	jsonData.Data = customerInfo
@@ -21,8 +25,6 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 	log.Println("Creating a new Account")
 
 	httpClient := http.Client{}
-	log.Println(client.Api_host_url + "/" + client.Api_host_version + "/" + "organisation/accounts")
-	log.Println(string(inputstr))
 	resp, err := httpClient.Post(client.Api_host_url+"/"+client.Api_host_version+"/"+"organisation/accounts",
 		"application/json", bytes.NewReader(inputstr))
 
@@ -60,8 +62,10 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 	return
 }
 
-// TODO: Add Comments
-
+/*
+API request for fetching account info, expects account id as input.
+Returns the success or failure along with Account data returned by the request to form3 api.
+*/
 func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	log.Println("Fetching Account details for Id:" + id)
 	httpClient := &http.Client{}
@@ -69,6 +73,7 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	if err != nil {
 		log.Println("Failed to fetch account info" + err.Error())
 		response.Status = "Failure"
+		response.ErrorCode = resp.StatusCode
 		response.ErrorMessage = err.Error()
 		return
 	}
@@ -101,7 +106,10 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	return
 }
 
-// TODO: Add Comments
+/*
+API request for delete account info expects account id as input.
+Returns the success or failure code based on response from form3 api.
+*/
 
 func (client *Form3_API) DeleteAccount(id string) (response ResponseJSON) {
 	log.Println("Deleting account ID:", id)
