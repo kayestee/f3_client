@@ -73,7 +73,9 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	if err != nil {
 		log.Println("Failed to fetch account info" + err.Error())
 		response.Status = "Failure"
-		response.ErrorCode = resp.StatusCode
+		if resp != nil {
+			response.ErrorCode = resp.StatusCode
+		}
 		response.ErrorMessage = err.Error()
 		return
 	}
