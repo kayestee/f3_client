@@ -1,3 +1,6 @@
+//go:build ( darwin && cgo) || linux
+// +build darwin linux
+
 package form3_client
 
 type AccountData struct {
