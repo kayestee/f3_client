@@ -1,4 +1,7 @@
-package test
+//go:build darwin || linux || windows
+// +build darwin linux windows
+
+package sampleclient
 
 import (
 	"github.com/google/uuid"
@@ -41,16 +44,14 @@ func TestCreateAccount(t *testing.T) {
 	resp := form3cli.CreateAccount(inputAccount)
 
 	if resp.Status != "Success" {
-		log.Println(resp.Data)
 		t.Errorf("Error in create account")
 		t.Fail()
 	}
 
-	if resp.Data.ID != "" {
-		generatedId = resp.Data.ID
+	if resp.Data[0].ID != "" {
+		generatedId = resp.Data[0].ID
 	}
-
-	log.Println("Generated Id ---" + resp.Data.ID)
+	log.Println("Generated Id ---" + resp.Data[0].ID)
 }
 
 func TestFetchAccount(t *testing.T) {
@@ -92,7 +93,7 @@ func TestCreateAccountFail(t *testing.T) {
 	inputAccount.Attributes = &accoutAttrs
 
 	resp := form3cli.CreateAccount(inputAccount)
-	if resp.Status != "Failure" {
+	if resp.ErrorCode != 400 {
 		t.Errorf("Creating account with invalid data.")
 		t.Fail()
 	}
@@ -111,13 +112,18 @@ func TestFetchAccountFailParsing(t *testing.T) {
 	if resp.ErrorMessage != "Error while unmarshalling response body" {
 		t.Errorf("Error in fetch account")
 	}
+}
 
+func TestFetchAllAccount(t *testing.T) {
+	resp := form3cli.FetchAllAccounts()
+	if resp.StatusCode != 200 && len(resp.Data) > 0 {
+		t.Errorf("Error in fetch account")
+	}
 }
 
 func TestDeleteAccountFail(t *testing.T) {
 	resp := form3cli.DeleteAccount("")
-	t.Log("Id is ", generatedId)
-	if resp.Status != "Failure" {
+	if resp.ErrorCode != 404 {
 		t.Errorf("Error in delete account")
 	}
 

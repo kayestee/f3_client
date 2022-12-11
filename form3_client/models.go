@@ -1,5 +1,5 @@
-//go:build ( darwin && cgo) || linux
-// +build darwin linux
+//go:build darwin || linux || windows
+// +build darwin linux windows
 
 package form3_client
 
@@ -31,14 +31,20 @@ type AccountAttributes struct {
 }
 
 type AccountJSON struct {
-	Data AccountData `json:"data,omitempty"`
+	Data  AccountData `json:"data,omitempty"`
+	Links Link        `json:"links,omitempty"`
+}
+
+type Link struct {
+	First string `json:"first,omitempty"`
+	Last  string `json:"last,omitempty"`
+	Self  string `json:"self,omitempty"`
 }
 
 type ResponseJSON struct {
-	Data         AccountData `json:"data,omitempty"`
-	Status       string      `json:"status,omitempty"`
-	StatusCode   int         `json:"status_code,omitempty"`
-	ErrorCode    int         `json:"error_code,omitempty"`
-	ErrorMessage string      `json:"error,omitempty"`
-	Message      string      `json:"message,omitempty"`
+	Data         []AccountData `json:"data,omitempty"`
+	Status       string        `json:"status,omitempty"`
+	StatusCode   int           `json:"status_code,omitempty"`
+	ErrorCode    int           `json:"error_code,omitempty"`
+	ErrorMessage string        `json:"error,omitempty"`
 }

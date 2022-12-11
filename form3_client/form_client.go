@@ -1,5 +1,5 @@
-//go:build darwin || linux
-// +build darwin linux
+//go:build darwin || linux || windows
+// +build darwin linux windows
 
 package form3_client
 
@@ -39,6 +39,7 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 	}
 
 	if resp.StatusCode != 201 {
+		log.Println("failure" + resp.Status)
 		response.Status = "Failure"
 		response.ErrorCode = resp.StatusCode
 		response.ErrorMessage = resp.Status
@@ -50,8 +51,10 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 		log.Println("Error while reading response body" + err.Error())
 	}
 
-	var respJsonUnMarshalled AccountJSON
+	var respJsonUnMarshalled = AccountJSON{}
+
 	errUnmarshall := json.Unmarshal(body, &respJsonUnMarshalled)
+
 	if errUnmarshall != nil {
 		log.Println("Error while unmarshalling response body" + errUnmarshall.Error())
 		response.Status = "Failure"
@@ -60,7 +63,7 @@ func (client *Form3_API) CreateAccount(customerInfo AccountData) (response Respo
 	}
 
 	response.Status = "Success"
-	response.Data = respJsonUnMarshalled.Data
+	response.Data = append(response.Data, respJsonUnMarshalled.Data)
 
 	return
 }
@@ -96,9 +99,9 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 		log.Println("Error while reading response body" + err.Error())
 		return
 	}
-
-	var respJsonUnMarshalled AccountJSON
+	var respJsonUnMarshalled = AccountJSON{}
 	errUnmarshall := json.Unmarshal(body, &respJsonUnMarshalled)
+
 	if errUnmarshall != nil {
 		log.Println("Error while unmarshalling response body" + errUnmarshall.Error())
 		response.Status = "Failure"
@@ -107,7 +110,53 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 	}
 
 	response.Status = "Success"
-	response.Data = respJsonUnMarshalled.Data
+	response.Data = append(response.Data, respJsonUnMarshalled.Data)
+
+	return
+}
+
+/*
+API request for fetching account info, expects account id as input.
+Returns the success or failure along with Account data returned by the request to form3 api.
+*/
+func (client *Form3_API) FetchAllAccounts() (response ResponseJSON) {
+	log.Println("Fetching Account details for Id:")
+	httpClient := &http.Client{}
+	resp, err := httpClient.Get(client.Api_host_url + "/" + client.Api_host_version + "/" + "organisation/accounts/")
+	if err != nil {
+		log.Println("Failed to fetch account info" + err.Error())
+		response.Status = "Failure"
+		if resp != nil {
+			response.ErrorCode = resp.StatusCode
+		}
+		response.ErrorMessage = err.Error()
+		return
+	}
+	if resp.StatusCode != 200 {
+		response.Status = "Failure"
+		response.ErrorCode = resp.StatusCode
+		response.ErrorMessage = resp.Status
+		return
+	}
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		response.Status = "Failure"
+		response.ErrorMessage = resp.Status
+		log.Println("Error while reading response body" + err.Error())
+		return
+	}
+	errUnmarshall := json.Unmarshal(body, &response)
+
+	if errUnmarshall != nil {
+		log.Println("Error while unmarshalling response body" + errUnmarshall.Error())
+		response.Status = "Failure"
+		response.ErrorMessage = "Error while unmarshalling response body"
+		return
+	}
+
+	response.Status = "Success"
+	response.StatusCode = resp.StatusCode
 	return
 }
 
@@ -144,7 +193,6 @@ func (client *Form3_API) DeleteAccount(id string) (response ResponseJSON) {
 	}
 
 	response.Status = "Success"
-	response.Message = "Account was deleted successfully"
 
 	return
 }

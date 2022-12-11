@@ -1,0 +1,56 @@
+{
+  "data":{
+    "attributes":[
+      {
+        "account_classification":"Personal",
+        "account_number":"4636173136040436731",
+        "bank_id":"400302",
+        "bank_id_code":"GBDSC",
+        "bic":"NWBKGB42",
+        "country":"GB",
+        "iban":"GB28NWBK40030212764204",
+        "name":[
+          "First",
+          "Name",
+          "Last",
+          "Name"
+        ],
+        "customer_id":"7989280115861240618"
+      }
+    ],
+    "id":"bbb8bfe9-602c-4232-bda3-e800cbec970f",
+    "organisation_id":"162236c1-3636-4a37-8a27-ce457811bbbc",
+    "type":"accounts"
+  },
+  "links":{
+
+  }
+}
+
+
+{
+  "data":{
+    "id":"{{random_guid}}",
+    "organisation_id":"{{organisation_id}}",
+    "type":"accounts",
+    "attributes":{
+      "country":"GB",
+      "base_currency":"GBP",
+      "bank_id":"400302",
+      "bank_id_code":"GBDSC",
+      "account_number":"10000004",
+      "customer_id":"234",
+      "iban":"GB28NWBK40030212764204",
+      "bic":"NWBKGB42",
+      "account_classification":"Personal",
+      "name":[
+        "Test Account"
+      ]
+    }
+  },
+  "links":{
+
+  }
+}
+
+
