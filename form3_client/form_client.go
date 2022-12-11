@@ -99,6 +99,7 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 		log.Println("Error while reading response body" + err.Error())
 		return
 	}
+
 	var respJsonUnMarshalled = AccountJSON{}
 	errUnmarshall := json.Unmarshal(body, &respJsonUnMarshalled)
 
@@ -111,7 +112,6 @@ func (client *Form3_API) FetchAccount(id string) (response ResponseJSON) {
 
 	response.Status = "Success"
 	response.Data = append(response.Data, respJsonUnMarshalled.Data)
-
 	return
 }
 

@@ -48,10 +48,11 @@ func TestCreateAccount(t *testing.T) {
 		t.Fail()
 	}
 
-	if resp.Data[0].ID != "" {
+	if resp.Data != nil {
 		generatedId = resp.Data[0].ID
+		log.Println("Generated Id ---" + resp.Data[0].ID)
 	}
-	log.Println("Generated Id ---" + resp.Data[0].ID)
+
 }
 
 func TestFetchAccount(t *testing.T) {
@@ -109,7 +110,8 @@ func TestFetchAccountFail(t *testing.T) {
 
 func TestFetchAccountFailParsing(t *testing.T) {
 	resp := form3cli.FetchAccount("")
-	if resp.ErrorMessage != "Error while unmarshalling response body" {
+
+	if resp.Status == "Failure" && resp.ErrorMessage != "Error while unmarshalling response body" {
 		t.Errorf("Error in fetch account")
 	}
 }
